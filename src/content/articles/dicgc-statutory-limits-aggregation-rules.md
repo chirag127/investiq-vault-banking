@@ -21,7 +21,7 @@ The **Deposit Insurance and Credit Guarantee Corporation (DICGC)**, a wholly own
 
 Understanding the precise mathematical and statutory contours of DICGC coverage is essential for any individual or corporate entity holding cash balances in Indian banks.
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     Depositor["Depositor Cash Balances"] --> BranchA["Branch A: Savings Account (₹2,50,000)"]
     Depositor --> BranchB["Branch B: Fixed Deposit (₹3,00,000)"]
@@ -39,11 +39,11 @@ flowchart TD
     NetBal --> PayoutRule{"Apply Statutory Ceiling (DICGC Act Sec 16)"}
     PayoutRule --> Insured["DICGC Payout: ₹5,00,000 (Maximum Cap)"]
     PayoutRule --> Uninsured["Uninsured Risk: ₹1,00,000 (Subordinated in Liquidation)"]
-```
+</div>
 
-## 1. The Statutory Insurance Ceiling: ₹5,00,000
+<h2 id="statutory-framework">1. Statutory Framework & Acts</h2>
 
-Under **Section 16(1)** of the DICGC Act, 1961 (as amended with effect from February 4, 2020), the maximum liability of the Corporation for each depositor in an insured bank is **₹5,00,000 (Five Lakh Rupees)**.
+Under **Section 16(1)** of the DICGC Act, 1961 (as amended with effect from February 4, 2020 via the Finance Act and Gazetted notifications), the maximum liability of the Corporation for each depositor in an insured bank is **₹5,00,000 (Five Lakh Rupees)**.
 
 ### Crucial Statutory Mechanics:
 1. **Principal and Accrued Interest Combined:** The ₹5 Lakh ceiling does **not** apply separately to principal and interest. If an individual holds an FD of ₹4,80,000 and has accrued ₹45,000 in interest up to the date of cancellation of the bank's license or imposition of moratorium, the total claim is ₹5,25,000. DICGC will disburse exactly **₹5,00,000**, leaving the remaining ₹25,000 as an unsecured claim against the official liquidator.
@@ -55,49 +55,75 @@ Under **Section 16(1)** of the DICGC Act, 1961 (as amended with effect from Febr
    - Recurring Deposits (RDs)
    - Auto-sweep term deposit units
 
-## 2. Right of Set-Off: Mandatory Loan Adjustment
+<h2 id="quantitative-mechanics">2. Quantitative Mechanics & Data</h2>
 
 Under **Section 17(1)** of the DICGC Act, 1961, the Corporation has the legal mandate to deduct any outstanding dues owed by the depositor to the same bank before calculating the insurable payout.
 
+<div class="math-display">
 $$\text{Net Insurable Balance} = \max\Big(0, \sum \text{Deposits} - \sum \text{Liabilities in Same Capacity}\Big)$$
+</div>
 
+<div class="math-display">
 $$\text{DICGC Disbursement} = \min\Big(₹5,00,000, \text{Net Insurable Balance}\Big)$$
+</div>
 
-### Worked Quantitative Example:
+### Empirical Banking Capital Data Matrix:
+
+| Institution Category | Mandated Minimum CRAR | DICGC Insured? | Maximum Cover | Regulatory Statute |
+| :--- | :--- | :--- | :--- | :--- |
+| **Scheduled Commercial Banks (PSBs/Private)** | 11.50% (Basel III) | Yes | ₹5,00,000 | Banking Regulation Act 1949 / RBI Act 1934 |
+| **Small Finance Banks (SFBs)** | 15.00% (Loss Buffer) | Yes | ₹5,00,000 | RBI Operating Guidelines for SFBs 2014 |
+| **Urban Cooperative Banks (Tier 1-4)** | 9.00% - 12.00% | Yes | ₹5,00,000 | Banking Regulation (Amendment) Act 2020 |
+| **Regional Rural Banks (RRBs)** | 9.00% | Yes | ₹5,00,000 | Regional Rural Banks Act 1976 |
+| **Primary Agricultural Credit Societies (PACS)** | Varies by State | **NO** | **₹0 (Uninsured)** | State Cooperative Societies Acts |
+
+<h2 id="worked-example">3. Worked Empirical Case Study</h2>
+
+Consider a business owner holding multiple balances and a loan facility at Axis Bank:
 
 | Account / Facility | Nature of Holding | Balance / Outstanding |
 | :--- | :--- | :--- |
 | Savings Account | Personal Asset | + ₹1,50,000 |
-| Fixed Deposit | Personal Asset | + ₹4,50,000 |
-| Auto-Sweep FD | Personal Asset | + ₹1,00,000 |
-| **Gross Personal Assets** | **Total Deposits** | **+ ₹7,00,000** |
-| Personal Loan Outstanding | Liability at same bank | - ₹2,50,000 |
-| **Net Balance after Set-Off** | **Insurable Claim** | **₹4,50,000** |
-| **DICGC Insurance Payout** | **Disbursed within 90 days** | **₹4,50,000 (100% of Net)** |
+| Fixed Deposit (Branch 1) | Personal Asset | + ₹3,50,000 |
+| Auto-Sweep FD (Branch 2) | Personal Asset | + ₹1,00,000 |
+| Accrued Quarterly Interest | Accrued Asset | + ₹15,000 |
+| **Gross Personal Deposits** | **Total Inflow Claims** | **+ ₹6,15,000** |
+| Personal Car Loan Outstanding | Liability at same bank | - ₹2,00,000 |
+| **Net Balance after Set-Off** | **Insurable Claim** | **₹4,15,000** |
+| **DICGC Insurance Payout** | **Disbursed within 90 days** | **₹4,15,000 (100% of Net)** |
 
-Because the net balance after statutory set-off (₹4,50,000) is below the statutory ceiling of ₹5,00,000, the depositor suffers zero capital impairment.
+Because the net balance after statutory set-off (₹4,15,000) is below the statutory ceiling of ₹5,00,000, the depositor suffers zero capital impairment.
 
-## 3. What Deposits Are Excluded from DICGC Insurance?
+<h2 id="insolvency-waterfall">4. Insolvency & Resolution Protocol</h2>
 
-Under **Section 2(g)** of the DICGC Act, 1961, the following deposit categories are strictly excluded from insurance protection:
+When an insured bank fails, the resolution and payout progression follows a strict statutory hierarchy:
 
-1. **Foreign Government Deposits:** Deposits of foreign governments.
-2. **Central / State Government Deposits:** Balances held by Central and State Governments.
-3. **Inter-Bank Deposits:** Monies deposited by one commercial or cooperative bank with another bank.
-4. **State Land Development Banks:** Deposits held by State Land Development Banks with State Cooperative Banks.
-5. **Deposits Received Outside India:** Any amount received by a bank outside India (e.g. overseas foreign branches).
-6. **Non-Banking Instruments:** Commercial paper, certificates of deposit (CDs), subordinated debt, and bonds issued by banks are securities, not deposits, and carry zero DICGC cover.
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant Bank as Distressed Bank
+    participant RBI as Reserve Bank of India
+    participant DICGC as DICGC
+    participant Liquidator as Official Liquidator
+    participant Depositor as Uninsured Depositor
 
-## 4. Multi-Bank Architecture: The Sovereign Firewall
+    RBI->>Bank: Imposes Section 35A Directions / Moratorium
+    Bank->>DICGC: Submits Certified Depositor List (within 45 Days)
+    DICGC->>DICGC: Forensic Set-Off & Aggregation Audit (within 30 Days)
+    DICGC->>Depositor: Direct Bank Transfer up to ₹5,00,000 (within 15 Days)
+    Note over DICGC,Depositor: Section 18A: Guaranteed 90-Day Interim Payout!
+    
+    Liquidator->>Liquidator: Liquidates Bank Assets & Collects Loans
+    Liquidator->>DICGC: Reimburses DICGC Payout First (Section 21 Priority)
+    Liquidator->>Depositor: Releases Residual Dividends on Balances > ₹5L (Pro-Rata)
+</div>
 
-Because DICGC protection applies **per depositor per bank**, an investor or treasury manager holding ₹20,00,000 in liquid capital can achieve 100% statutory deposit insurance by distributing ₹5,00,000 across four separate Scheduled Commercial Banks:
+<h2 id="actionable-checklist">5. Institutional Risk Checklist</h2>
 
-| Institution | Depositor Holding | DICGC Cap | Uninsured Exposure |
-| :--- | :--- | :--- | :--- |
-| State Bank of India | ₹5,00,000 | ₹5,00,000 | ₹0 |
-| HDFC Bank | ₹5,00,000 | ₹5,00,000 | ₹0 |
-| ICICI Bank | ₹5,00,000 | ₹5,00,000 | ₹0 |
-| Bank of Baroda | ₹5,00,000 | ₹5,00,000 | ₹0 |
-| **Total Portfolio** | **₹20,00,000** | **₹20,00,000** | **₹0 (100% Protected)** |
+Before parking enterprise operating cash or family reserves in an Indian banking institution, execute the following forensic verification checklist:
 
-By contrasting this distributed architecture against parking ₹20 Lakhs in a single bank (where ₹15 Lakhs remains at risk during liquidation), depositors eliminate idiosyncratic institutional credit risk without sacrificing liquidity.
+- [ ] **Verify Schedule II Status:** Confirm the bank is included in the Second Schedule to the RBI Act, 1934 on `rbi.org.in`.
+- [ ] **Verify DICGC Registration:** Check that the bank's name appears on the active list of insured banks at `dicgc.org.in`.
+- [ ] **Calculate Gross Cap (Principal + Interest):** Never exceed ₹4,50,000 in initial principal to leave buffer room for cumulative accrued interest under the ₹5 Lakh ceiling.
+- [ ] **Partition Across Unrelated Institutions:** For portfolios exceeding ₹5 Lakhs, distribute cash across distinct banking licenses (e.g. SBI, HDFC Bank, ICICI Bank, Bank of Baroda).
+- [ ] **Separate Legal Capacities:** Utilize individual accounts, joint accounts with inverted primary applicant orders, minor guardian accounts, and corporate trusts to create separate ₹5 Lakh statutory protections within the same bank.

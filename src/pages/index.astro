@@ -1,0 +1,341 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DICGCAuditSolver from '../components/DICGCAuditSolver.astro';
+import AutoSweepYieldOptimizer from '../components/AutoSweepYieldOptimizer.astro';
+import CashTieringPlanner from '../components/CashTieringPlanner.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles');
+const sortedArticles = articles.sort((a, b) => b.data.publishedDate.localeCompare(a.data.publishedDate));
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Bank Risk, Deposit Insurance & Operating Cash Systems"
+  description="Quantitative Indian banking research portal: DICGC deposit insurance aggregation audits, D-SIB systemic capital buffers, flexi-sweep optimization, and treasury cash tiering."
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-badge">
+        <span class="badge badge-gold">INVESTIQ INDIA • SITE 04 OF 60</span>
+        <span class="badge badge-blue">SOVEREIGN BANKING ARCHITECTURE</span>
+      </div>
+
+      <h1 class="hero-title">
+        VaultBanking
+        <span class="hero-highlight">Bank Risk, Deposit Insurance & Operating Cash Systems</span>
+      </h1>
+
+      <p class="hero-description">
+        An autonomous, quantitative financial-research repository evaluating Indian bank balance sheets, statutory DICGC deposit insurance aggregation limits, D-SIB systemic importance, auto-sweep flexi-deposit mechanics, and institutional operating cash tiering.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#solvers" class="btn btn-gold">Launch Banking Solvers</a>
+        <a href={`${basePath}/articles/`} class="btn">Explore 15+ Master Treatises</a>
+        <a href={`${basePath}/sources/`} class="btn">Inspect Statutory Acts</a>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="metrics-strip">
+        <div class="metric-item">
+          <span class="metric-num">₹5,00,000</span>
+          <span class="metric-label">DICGC Statutory Insurance Cap</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-num">90 Days</span>
+          <span class="metric-label">Mandatory Payout (Sec 18A)</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-num">3 D-SIBs</span>
+          <span class="metric-label">SBI, HDFC Bank, ICICI Bank</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-num">100%</span>
+          <span class="metric-label">Client-Side Zero Telemetry</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Solvers Anchor -->
+  <section id="solvers" class="solvers-section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="badge badge-gold">CLIENT-SIDE ENGINES</span>
+        <h2>Institutional Banking Solvers & Audits</h2>
+        <p>Deterministic mathematical tools executing 100% in your local browser with zero server data transmission.</p>
+      </div>
+
+      <DICGCAuditSolver />
+      <AutoSweepYieldOptimizer />
+      <CashTieringPlanner />
+    </div>
+  </section>
+
+  <!-- Research Library Highlights -->
+  <section class="articles-section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="badge badge-blue">PEER-REVIEWED ARCHITECTURE</span>
+        <h2>Master Research Treatises & Statutory Breakdowns</h2>
+        <p>Forensic legal and quantitative examinations of Indian central banking statutes, gazettes, and judicial precedents.</p>
+      </div>
+
+      <div class="articles-grid">
+        {sortedArticles.slice(0, 6).map((art) => (
+          <article class="card article-card">
+            <div class="card-meta">
+              <span class="badge badge-gold">{art.data.category}</span>
+              <span class="meta-date">Audited: {art.data.lastVerifiedDate}</span>
+            </div>
+            <h3 class="card-title">
+              <a href={`${basePath}/articles/${art.slug}/`}>{art.data.title}</a>
+            </h3>
+            <p class="card-desc">{art.data.description}</p>
+            <div class="card-footer">
+              <a href={`${basePath}/articles/${art.slug}/`} class="card-link">
+                Read Full Paper & Sources →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="view-all-box">
+        <a href={`${basePath}/articles/`} class="btn btn-primary">
+          View Complete 15+ Paper Research Matrix →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Banking Principles Callout -->
+  <section class="principles-section">
+    <div class="container container-narrow">
+      <div class="card principles-card">
+        <h3>Core Principles of Indian Bank Solvency</h3>
+        <ul class="principles-list">
+          <li>
+            <strong>1. Single Legal Person Rule:</strong> All accounts of a depositor across all branches of a single bank are aggregated into one single ₹5,00,000 DICGC insurance ceiling.
+          </li>
+          <li>
+            <strong>2. Separate Right & Capacity:</strong> Personal individual accounts, joint holdings with altered applicant sequences, minor guardian accounts, and registered company accounts enjoy separate, distinct ₹5 Lakh covers.
+          </li>
+          <li>
+            <strong>3. Sole Proprietorship Merger:</strong> A sole proprietorship has no independent juridical existence; current accounts of a proprietorship are statutorily clubbed with the proprietor's individual personal savings.
+          </li>
+          <li>
+            <strong>4. Section 18A Interim Liquidity:</strong> If the RBI freezes a distressed bank under moratorium or All-Inclusive Directions, depositors are entitled to receive up to ₹5 Lakhs within a strict 90-day statutory boundary.
+          </li>
+          <li>
+            <strong>5. D-SIB Systemic Safety:</strong> State Bank of India, HDFC Bank, and ICICI Bank operate with additional CET1 equity surcharges and are deemed Domestic Systemically Important Banks.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-section {
+    padding: 3rem 0 3.5rem;
+    border-bottom: 1px solid var(--iq-border);
+    background: radial-gradient(circle at top right, rgba(56, 139, 253, 0.08), transparent 50%),
+                radial-gradient(circle at bottom left, rgba(227, 179, 65, 0.06), transparent 50%);
+  }
+
+  .hero-container {
+    max-width: 980px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-highlight {
+    display: block;
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: var(--iq-text-secondary);
+    margin-top: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-description {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--iq-border-subtle);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .metric-num {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--iq-rupee-gold);
+    font-family: var(--iq-font-mono);
+  }
+
+  .metric-label {
+    font-size: 0.8rem;
+    color: var(--iq-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  .solvers-section, .articles-section, .principles-section {
+    padding: 3.5rem 0;
+  }
+
+  .section-heading {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .section-heading h2 {
+    font-size: 2.15rem;
+    margin: 0.5rem 0;
+  }
+
+  .section-heading p {
+    color: var(--iq-text-secondary);
+    font-size: 1rem;
+  }
+
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--iq-surface);
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .meta-date {
+    font-size: 0.75rem;
+    color: var(--iq-text-muted);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.35;
+  }
+
+  .card-title a {
+    color: var(--iq-text-primary);
+  }
+
+  .card-title a:hover {
+    color: var(--iq-text-link);
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--iq-text-link);
+  }
+
+  .view-all-box {
+    text-align: center;
+  }
+
+  .principles-card {
+    padding: 2rem;
+    background: var(--iq-surface-raised);
+    border: 1px solid var(--iq-border);
+  }
+
+  .principles-card h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .principles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .principles-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .principles-list li:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.35rem;
+    }
+    .hero-highlight {
+      font-size: 1.35rem;
+    }
+  }
+</style>

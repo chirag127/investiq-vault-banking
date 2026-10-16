@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DICGCAuditSolver from '../../components/DICGCAuditSolver.astro';
+import AutoSweepYieldOptimizer from '../../components/AutoSweepYieldOptimizer.astro';
+import CashTieringPlanner from '../../components/CashTieringPlanner.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Interactive Banking Solvers & Quantitative Audits"
+  description="Client-side financial solvers for Indian bank depositors: DICGC deposit insurance aggregation audit, auto-sweep vs pure savings yield optimizer, and institutional operating cash tiering."
+>
+  <div class="container calculators-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Interactive Solvers</span>
+    </nav>
+
+    <header class="calculators-header">
+      <div class="header-tags">
+        <span class="badge badge-gold">CLIENT-SIDE PRIVACY GUARANTEE</span>
+        <span class="badge badge-blue">DETERMINISTIC FINANCIAL ENGINES</span>
+      </div>
+      <h1 class="header-title">Banking Solvers & Quantitative Audits</h1>
+      <p class="header-desc">
+        Evaluate your real institutional counterparty exposure, model multi-bank DICGC capacity boundaries, and compute precise post-tax yields with zero server communication and zero cookies.
+      </p>
+    </header>
+
+    <div class="solvers-stack">
+      <DICGCAuditSolver />
+      <AutoSweepYieldOptimizer />
+      <CashTieringPlanner />
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>Methodology & Limitations Notice:</strong> All solvers compute figures deterministically using standard statutory rules (DICGC Act 1961 as amended 2021, Income Tax Act 1961 Sections 80TTA/80TTB/194A, and RBI Master Directions). Actual bank interest rates, premature withdrawal penalty structures, and insolvency resolution outcomes depend on contractual terms and regulatory orders.
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .calculators-container {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .calculators-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .header-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .header-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .header-desc {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    max-width: 820px;
+    line-height: 1.6;
+  }
+
+  .solvers-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+    margin-bottom: 3.5rem;
+  }
+</style>

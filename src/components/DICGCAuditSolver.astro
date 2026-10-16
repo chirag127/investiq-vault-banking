@@ -1,0 +1,479 @@
+---
+// DICGCAuditSolver.astro
+// Interactive client-side solver for DICGC Deposit Insurance Aggregation
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<div class="card solver-card" id="dicgc-audit">
+  <div class="solver-header">
+    <div class="solver-tag">
+      <span class="badge badge-gold">STATUTORY AUDIT TOOL</span>
+      <span class="badge badge-blue">DICGC ACT 1961 (SEC 16 & 17)</span>
+    </div>
+    <h3 class="solver-title">DICGC Deposit Insurance Aggregation Audit</h3>
+    <p class="solver-desc">
+      Model multi-bank, multi-branch, and multi-capacity deposit holdings under the Indian statutory framework. Evaluates right-of-set-off loan liabilities, merges sole proprietorship accounts with personal capacity, and audits uninsured capital at risk against the statutory ₹5,00,000 threshold.
+    </p>
+  </div>
+
+  <div class="solver-body">
+    <!-- Accounts Ledger Table -->
+    <div class="table-wrapper">
+      <table class="ledger-table" id="accounts-table">
+        <thead>
+          <tr>
+            <th>Bank Name</th>
+            <th>Legal Capacity / Ownership</th>
+            <th>Type</th>
+            <th>Deposit Balance (₹)</th>
+            <th>Accrued Int. (₹)</th>
+            <th>Loan Dues (₹)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="ledger-body">
+          <!-- Dynamically populated or default rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="solver-actions">
+      <button type="button" id="add-account-btn" class="btn btn-primary">
+        + Add Account Holding
+      </button>
+      <button type="button" id="reset-ledger-btn" class="btn">
+        Reset to Sample Scenario
+      </button>
+    </div>
+
+    <!-- Live Aggregation Report -->
+    <div class="audit-results-panel" id="audit-results">
+      <h4>Institutional Audit Summary</h4>
+      <div class="results-grid">
+        <div class="metric-card">
+          <span class="metric-label">Total Gross Deposits</span>
+          <span class="metric-value" id="total-gross-disp">₹0</span>
+        </div>
+        <div class="metric-card metric-success">
+          <span class="metric-label">Insured by DICGC</span>
+          <span class="metric-value" id="total-insured-disp">₹0</span>
+        </div>
+        <div class="metric-card metric-danger">
+          <span class="metric-label">Uninsured At-Risk Capital</span>
+          <span class="metric-value" id="total-at-risk-disp">₹0</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Portfolio Insurance Ratio</span>
+          <span class="metric-value" id="total-coverage-disp">100%</span>
+        </div>
+      </div>
+
+      <!-- Bank-by-Bank Detailed Cards -->
+      <div class="bank-breakdown-list" id="bank-breakdown-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Actionable Advisory Callout -->
+      <div class="callout callout-warning" id="audit-advisory-box">
+        <strong>Statutory Analysis:</strong> All holdings evaluated strictly against Section 16(1) of the DICGC Act, 1961. Accrued interest is included in the ₹5 Lakh statutory cap. Outstanding loans in the same right and capacity are set off under Section 17.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { auditDICGCAggregation, type AccountHolding } from '../lib/finance-math';
+
+  // Sample Baseline Scenario
+  const sampleHoldings: AccountHolding[] = [
+    {
+      id: 'acc-1',
+      bankName: 'HDFC Bank',
+      capacity: 'individual',
+      accountType: 'savings',
+      principal: 250000,
+      accruedInterest: 4500,
+      outstandingLoanDues: 0
+    },
+    {
+      id: 'acc-2',
+      bankName: 'HDFC Bank',
+      capacity: 'individual',
+      accountType: 'fixed_deposit',
+      principal: 350000,
+      accruedInterest: 18000,
+      outstandingLoanDues: 0
+    },
+    {
+      id: 'acc-3',
+      bankName: 'State Bank of India',
+      capacity: 'individual',
+      accountType: 'savings',
+      principal: 480000,
+      accruedInterest: 8500,
+      outstandingLoanDues: 0
+    },
+    {
+      id: 'acc-4',
+      bankName: 'State Bank of India',
+      capacity: 'joint_first',
+      accountType: 'fixed_deposit',
+      principal: 450000,
+      accruedInterest: 12000,
+      outstandingLoanDues: 0
+    },
+    {
+      id: 'acc-5',
+      bankName: 'Punjab National Bank',
+      capacity: 'sole_proprietorship',
+      accountType: 'current',
+      principal: 600000,
+      accruedInterest: 0,
+      outstandingLoanDues: 150000 // Loan set off
+    }
+  ];
+
+  let currentHoldings = [...sampleHoldings];
+
+  function renderTable() {
+    const tbody = document.getElementById('ledger-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    currentHoldings.forEach((acc, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input type="text" class="form-control bank-input" data-idx="${idx}" value="${acc.bankName}" />
+        </td>
+        <td>
+          <select class="form-control capacity-input" data-idx="${idx}">
+            <option value="individual" ${acc.capacity === 'individual' ? 'selected' : ''}>Individual (Personal)</option>
+            <option value="joint_first" ${acc.capacity === 'joint_first' ? 'selected' : ''}>Joint (1st Applicant)</option>
+            <option value="joint_second" ${acc.capacity === 'joint_second' ? 'selected' : ''}>Joint (2nd Applicant)</option>
+            <option value="sole_proprietorship" ${acc.capacity === 'sole_proprietorship' ? 'selected' : ''}>Sole Proprietorship (Merged)</option>
+            <option value="minor_guardian" ${acc.capacity === 'minor_guardian' ? 'selected' : ''}>Guardian of Minor</option>
+            <option value="corporate_trust" ${acc.capacity === 'corporate_trust' ? 'selected' : ''}>Corporate / Trust / Firm</option>
+          </select>
+        </td>
+        <td>
+          <select class="form-control type-input" data-idx="${idx}">
+            <option value="savings" ${acc.accountType === 'savings' ? 'selected' : ''}>Savings</option>
+            <option value="fixed_deposit" ${acc.accountType === 'fixed_deposit' ? 'selected' : ''}>Fixed Deposit</option>
+            <option value="current" ${acc.accountType === 'current' ? 'selected' : ''}>Current</option>
+            <option value="auto_sweep_fd" ${acc.accountType === 'auto_sweep_fd' ? 'selected' : ''}>Auto-Sweep FD</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" min="0" step="5000" class="form-control principal-input" data-idx="${idx}" value="${acc.principal}" />
+        </td>
+        <td>
+          <input type="number" min="0" step="500" class="form-control interest-input" data-idx="${idx}" value="${acc.accruedInterest}" />
+        </td>
+        <td>
+          <input type="number" min="0" step="5000" class="form-control loan-input" data-idx="${idx}" value="${acc.outstandingLoanDues || 0}" />
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger-sm remove-row-btn" data-idx="${idx}">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    attachTableListeners();
+    runAudit();
+  }
+
+  function attachTableListeners() {
+    document.querySelectorAll('.bank-input').forEach(input => {
+      input.addEventListener('change', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings[idx].bankName = e.target.value;
+        runAudit();
+      });
+    });
+
+    document.querySelectorAll('.capacity-input').forEach(select => {
+      select.addEventListener('change', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings[idx].capacity = e.target.value;
+        runAudit();
+      });
+    });
+
+    document.querySelectorAll('.principal-input').forEach(input => {
+      input.addEventListener('input', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings[idx].principal = Math.max(0, Number(e.target.value) || 0);
+        runAudit();
+      });
+    });
+
+    document.querySelectorAll('.interest-input').forEach(input => {
+      input.addEventListener('input', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings[idx].accruedInterest = Math.max(0, Number(e.target.value) || 0);
+        runAudit();
+      });
+    });
+
+    document.querySelectorAll('.loan-input').forEach(input => {
+      input.addEventListener('input', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings[idx].outstandingLoanDues = Math.max(0, Number(e.target.value) || 0);
+        runAudit();
+      });
+    });
+
+    document.querySelectorAll('.remove-row-btn').forEach(btn => {
+      btn.addEventListener('click', (e: any) => {
+        const idx = Number(e.target.dataset.idx);
+        currentHoldings.splice(idx, 1);
+        renderTable();
+      });
+    });
+  }
+
+  function runAudit() {
+    const report = auditDICGCAggregation(currentHoldings);
+
+    const grossDisp = document.getElementById('total-gross-disp');
+    const insuredDisp = document.getElementById('total-insured-disp');
+    const atRiskDisp = document.getElementById('total-at-risk-disp');
+    const coverageDisp = document.getElementById('total-coverage-disp');
+    const breakdownCont = document.getElementById('bank-breakdown-container');
+    const advisoryBox = document.getElementById('audit-advisory-box');
+
+    if (grossDisp) grossDisp.textContent = `₹${report.totalGrossDepositsAcrossBanks.toLocaleString('en-IN')}`;
+    if (insuredDisp) insuredDisp.textContent = `₹${report.totalInsuredAcrossBanks.toLocaleString('en-IN')}`;
+    if (atRiskDisp) atRiskDisp.textContent = `₹${report.totalAtRiskAcrossBanks.toLocaleString('en-IN')}`;
+    if (coverageDisp) coverageDisp.textContent = `${report.effectiveNetworkCoveragePercent}%`;
+
+    if (breakdownCont) {
+      breakdownCont.innerHTML = '';
+      report.bankAudits.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'bank-audit-card';
+        card.innerHTML = `
+          <div class="bank-card-header">
+            <h5>${b.bankName}</h5>
+            <span class="badge ${b.totalUninsuredAmount > 0 ? 'badge-danger' : 'badge-green'}">
+              Coverage: ${b.overallCoveragePercent}%
+            </span>
+          </div>
+          <div class="bank-card-stats">
+            <div>Gross: <strong>₹${b.grossHoldings.toLocaleString('en-IN')}</strong></div>
+            <div>Set-Off Loans: <strong>₹${b.totalSetOff.toLocaleString('en-IN')}</strong></div>
+            <div>Insured Payout: <strong style="color: var(--iq-success);">₹${b.totalInsuredAmount.toLocaleString('en-IN')}</strong></div>
+            <div>Uninsured at Risk: <strong style="color: var(--iq-danger);">₹${b.totalUninsuredAmount.toLocaleString('en-IN')}</strong></div>
+          </div>
+          <div class="capacity-pills">
+            ${b.capacities.map(c => `
+              <div class="cap-pill">
+                <span>${c.capacityDescription}</span>
+                <span>Net: ₹${c.netInsurableBalance.toLocaleString('en-IN')} | Insured: ₹${c.insuredPayout.toLocaleString('en-IN')}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        breakdownCont.appendChild(card);
+      });
+    }
+
+    if (advisoryBox) {
+      if (report.recommendedReallocations.length > 0) {
+        advisoryBox.innerHTML = `
+          <strong>Actionable Reallocation Advisory:</strong>
+          <ul style="margin: 0.5rem 0 0 1.25rem;">
+            ${report.recommendedReallocations.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+        `;
+        advisoryBox.className = 'callout callout-warning';
+      } else {
+        advisoryBox.innerHTML = `
+          <strong>100% Statutory Protection Verified:</strong> Every rupee of net deposits across all institutions is fully enclosed within the ₹5,00,000 statutory DICGC insurance umbrella. Zero uninsured capital at risk.
+        `;
+        advisoryBox.className = 'callout callout-success';
+      }
+    }
+  }
+
+  // Bind Buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const addBtn = document.getElementById('add-account-btn');
+    const resetBtn = document.getElementById('reset-ledger-btn');
+
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        currentHoldings.push({
+          id: `acc-${Date.now()}`,
+          bankName: 'ICICI Bank',
+          capacity: 'individual',
+          accountType: 'fixed_deposit',
+          principal: 200000,
+          accruedInterest: 0,
+          outstandingLoanDues: 0
+        });
+        renderTable();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        currentHoldings = [...sampleHoldings];
+        renderTable();
+      });
+    }
+
+    renderTable();
+  });
+</script>
+
+<style>
+  .solver-card {
+    margin: 2rem 0;
+    padding: 2rem;
+  }
+
+  .solver-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 1.25rem;
+  }
+
+  .solver-tag {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .solver-title {
+    font-size: 1.75rem;
+    margin: 0.25rem 0 0.5rem 0;
+  }
+
+  .solver-desc {
+    color: var(--iq-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .ledger-table input, .ledger-table select {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .btn-danger-sm {
+    background: var(--iq-danger-bg);
+    color: var(--iq-danger);
+    border: 1px solid var(--iq-danger);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--iq-radius-sm);
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .solver-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+  }
+
+  .audit-results-panel {
+    background-color: var(--iq-surface-raised);
+    border: 1px solid var(--iq-border);
+    border-radius: var(--iq-radius-lg);
+    padding: 1.5rem;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .metric-card {
+    background: var(--iq-surface);
+    border: 1px solid var(--iq-border);
+    border-radius: var(--iq-radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-label {
+    font-size: 0.78rem;
+    color: var(--iq-text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-top: 0.35rem;
+    color: var(--iq-text-primary);
+    font-family: var(--iq-font-mono);
+  }
+
+  .metric-success .metric-value {
+    color: var(--iq-success);
+  }
+
+  .metric-danger .metric-value {
+    color: var(--iq-danger);
+  }
+
+  .bank-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bank-audit-card {
+    background: var(--iq-surface);
+    border: 1px solid var(--iq-border);
+    border-radius: var(--iq-radius-md);
+    padding: 1rem 1.25rem;
+  }
+
+  .bank-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bank-card-header h5 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .bank-card-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .capacity-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .cap-pill {
+    background: var(--iq-surface-raised);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--iq-radius-sm);
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    color: var(--iq-text-secondary);
+  }
+</style>

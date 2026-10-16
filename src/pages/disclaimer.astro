@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Educational Research Disclaimer & Regulatory Notice"
+  description="InvestiQ VaultBanking institutional disclaimer: educational and mathematical research purpose, absence of individualized advisory, and Indian banking regulatory framework."
+>
+  <div class="container container-narrow disclaimer-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Disclaimer</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-warning">REGULATORY & COMPLIANCE NOTICE</span>
+      <h1 class="page-title">Educational & Research Disclaimer</h1>
+      <p class="page-subtitle">
+        Mandatory statutory disclosures regarding the scope, limitations, and educational intent of VaultBanking.
+      </p>
+    </header>
+
+    <div class="disclaimer-content">
+      <div class="callout callout-warning">
+        <strong>Not Financial, Legal, or Insolvency Advice:</strong> VaultBanking is an independent, open-source educational research publication maintained by the InvestiQ India team. It is intended exclusively for quantitative analysis, financial literacy, and institutional research purposes under Indian regulatory standards.
+      </div>
+
+      <h2>1. No Individual Advisory Relationship</h2>
+      <p>
+        The content, interactive calculators, models, and treatises published on VaultBanking do not constitute:
+      </p>
+      <ul>
+        <li>Individualized investment advice or financial planning under the SEBI (Investment Advisers) Regulations, 2013;</li>
+        <li>Legal opinions or formal insolvency representations under the Advocates Act, 1961;</li>
+        <li>Tax advice or formal tax filings under the Chartered Accountants Act, 1949 or Income Tax Act, 1961;</li>
+        <li>A solicitation or endorsement to deposit funds in any specific commercial, cooperative, or small finance bank.</li>
+      </ul>
+
+      <h2>2. Statutory Interpretation & Judicial Precedents</h2>
+      <p>
+        While every effort is made to maintain complete fidelity to the statutory text of the **DICGC Act, 1961 (as amended)**, the **Banking Regulation Act, 1949**, the **Reserve Bank of India Act, 1934**, and published judicial authorities, banking law is dynamic. Resolution schemes, moratoria directions, and official liquidator determinations are subject to the executive discretion of the Reserve Bank of India and competent judicial benches.
+      </p>
+
+      <h2>3. Limitation of Liability</h2>
+      <p>
+        Neither InvestiQ India, nor its contributors, shall be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of the use, interpretation, or reliance upon any calculation, scenario output, or analysis provided on this website. Users must independently consult qualified SEBI-registered Investment Advisers (RIAs), Chartered Accountants (CAs), or legal counsel before executing significant banking transactions.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .disclaimer-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .disclaimer-content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--iq-text-primary);
+  }
+
+  .disclaimer-content h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+</style>

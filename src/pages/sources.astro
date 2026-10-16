@@ -1,0 +1,242 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const sourcesList = [
+  {
+    category: "Primary Statutes & Gazettes",
+    items: [
+      {
+        title: "Deposit Insurance and Credit Guarantee Corporation Act, 1961 (Act No. 47 of 1961)",
+        citation: "Sections 16, 17, 18A, 21",
+        description: "Statutory foundation for bank deposit insurance, ₹5,00,000 ceiling, mandatory set-off of liabilities, and subrogation priority.",
+        url: "https://www.dicgc.org.in"
+      },
+      {
+        title: "Deposit Insurance and Credit Guarantee Corporation (Amendment) Act, 2021",
+        citation: "Act No. 30 of 2021; Gazette Notification Sept 1, 2021",
+        description: "Enacted Section 18A establishing the binding 90-day interim payout mandate during bank moratoriums or Section 35A directions.",
+        url: "https://www.prsindia.org"
+      },
+      {
+        title: "Banking Regulation Act, 1949",
+        citation: "Act No. 10 of 1949 (Sections 35A, 42, 45, 45ZA-45ZF)",
+        description: "Statutory powers for RBI directions, bank moratoriums, amalgamation schemes, and account nomination procedures (Form DA-1).",
+        url: "https://www.indiacode.nic.in"
+      },
+      {
+        title: "Banking Regulation (Amendment) Act, 2020",
+        citation: "Act No. 39 of 2020",
+        description: "Brought Urban Cooperative Banks (UCBs) under direct RBI supervisory powers for management supersession and resolution.",
+        url: "https://www.indiacode.nic.in"
+      },
+      {
+        title: "Reserve Bank of India Act, 1934",
+        citation: "Section 42(6)(a) - Second Schedule",
+        description: "Statutory qualifications for classification as a Scheduled Commercial Bank in India.",
+        url: "https://www.rbi.org.in"
+      },
+      {
+        title: "Income Tax Act, 1961",
+        citation: "Sections 80TTA, 80TTB, 194A",
+        description: "Governs tax deduction on savings bank interest (₹10k for non-seniors), senior citizen deposit interest (₹50k), and TDS on term deposits.",
+        url: "https://incometaxindia.gov.in"
+      },
+      {
+        title: "Indian Contract Act, 1872",
+        citation: "Section 171 - General Lien of Bankers",
+        description: "Statutory basis for the Banker's Right of Set-Off against matured debts across accounts held in the same right and capacity.",
+        url: "https://www.indiacode.nic.in"
+      }
+    ]
+  },
+  {
+    category: "Reserve Bank of India Master Directions & Frameworks",
+    items: [
+      {
+        title: "RBI Framework for Dealing with Domestic Systemically Important Banks (D-SIBs)",
+        citation: "July 2014 Framework & Annual Releases 2024–2025",
+        description: "Classifies State Bank of India, HDFC Bank, and ICICI Bank into D-SIB buckets and mandates additional Common Equity Tier 1 (CET1) capital surcharges.",
+        url: "https://www.rbi.org.in"
+      },
+      {
+        title: "Master Direction – Reserve Bank of India (Interest Rate on Deposits) Directions, 2016",
+        citation: "RBI/DBR/2015-16/19 Master Direction DBR.Dir.No.84/13.03.00/2015-16",
+        description: "Rules governing savings bank interest calculation, term deposit tenures, and premature withdrawal penal rate structures.",
+        url: "https://www.rbi.org.in"
+      },
+      {
+        title: "Customer Protection – Limiting Liability in Unauthorised Electronic Banking Transactions",
+        citation: "Circular DBR.No.Leg.BC.78/09.07.005/2017-18",
+        description: "Enforces Zero Liability if reported within 3 days, capped liability within 4-7 days, 10-day shadow credit mandate, and burden of proof on banks.",
+        url: "https://www.rbi.org.in"
+      },
+      {
+        title: "Reserve Bank - Integrated Ombudsman Scheme, 2021 (RB-IOS 2021)",
+        citation: "RBI Notification Ref. CEPD. PR. No. /13.01.001/2021-22",
+        description: "One Nation, One Ombudsman framework with ₹20 Lakhs compensation powers for deficiency in banking services.",
+        url: "https://cms.rbi.org.in"
+      },
+      {
+        title: "Master Direction on Inoperative Accounts / Unclaimed Deposits in Banks",
+        citation: "Updated RBI Master Direction 2024; DEA Fund Scheme 2014",
+        description: "Prohibits minimum balance penalties on dormant accounts; mandates 10-year unclaimed transfers to DEA Fund and UDGAM portal search.",
+        url: "https://udgam.rbi.org.in"
+      }
+    ]
+  },
+  {
+    category: "Landmark Judicial Precedents",
+    items: [
+      {
+        title: "Supreme Court of India: Smt. Sarbati Devi and Anr. v. Smt. Usha Devi",
+        citation: "AIR 1984 SC 346; (1984) 1 SCC 424",
+        description: "Established the definitive legal principle that a nominee is merely a trustee/bailee who receives funds to give a valid discharge, and holds proceeds for legal heirs.",
+        url: "https://main.sci.gov.in"
+      },
+      {
+        title: "Supreme Court of India: Ram Chander Talwar & Anr. v. Devender Kumar Talwar & Ors.",
+        citation: "(2010) 10 SCC 671",
+        description: "Reaffirmed under Section 45ZA of the Banking Regulation Act that nomination does not alter the laws of succession or create absolute ownership.",
+        url: "https://main.sci.gov.in"
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout
+  title="Official Indian Statutory Sources & Regulatory Gazettes"
+  description="Comprehensive primary source registry of the statutes, RBI Master Directions, DICGC regulations, and Supreme Court judgments underpinning VaultBanking."
+>
+  <div class="container container-narrow sources-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Statutory Sources</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-gold">PRIMARY REGULATORY EVIDENCE</span>
+      <h1 class="page-title">Statutory Sources & Legal Bibliography</h1>
+      <p class="page-subtitle">
+        Every formula, threshold, timeline, and legal doctrine on VaultBanking is directly sourced from authentic Government of India gazettes, central bank circulars, or apex court judgments.
+      </p>
+    </header>
+
+    <div class="sources-stack">
+      {sourcesList.map(cat => (
+        <section class="sources-cat-block">
+          <h2 class="sources-cat-title">{cat.category}</h2>
+          <div class="sources-cards">
+            {cat.items.map(src => (
+              <div class="card source-item-card">
+                <div class="source-top">
+                  <a href={src.url} target="_blank" rel="noopener noreferrer" class="source-title-link">
+                    <h3>{src.title}</h3>
+                  </a>
+                  <span class="source-citation">{src.citation}</span>
+                </div>
+                <p class="source-description">{src.description}</p>
+                <div class="source-link-action">
+                  <a href={src.url} target="_blank" rel="noopener noreferrer" class="ext-link">
+                    Open Official Document at {new URL(src.url).hostname} ↗
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .sources-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .sources-cat-block {
+    margin-bottom: 3rem;
+  }
+
+  .sources-cat-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+
+  .sources-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .source-item-card {
+    padding: 1.25rem 1.5rem;
+    background: var(--iq-surface);
+  }
+
+  .source-top {
+    margin-bottom: 0.5rem;
+  }
+
+  .source-item-card h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.15rem;
+    color: var(--iq-text-primary);
+  }
+
+  .source-title-link:hover h3 {
+    color: var(--iq-text-link);
+  }
+
+  .source-citation {
+    font-size: 0.82rem;
+    color: var(--iq-rupee-gold);
+    font-family: var(--iq-font-mono);
+  }
+
+  .source-description {
+    font-size: 0.92rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.5;
+    margin: 0.5rem 0 0.75rem 0;
+  }
+
+  .ext-link {
+    font-size: 0.82rem;
+    color: var(--iq-text-link);
+    font-weight: 600;
+  }
+</style>

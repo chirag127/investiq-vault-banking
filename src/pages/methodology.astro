@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Calculation Methodologies & Mathematical Formulations"
+  description="Mathematical derivations, statutory logic, and computational formulas powering the DICGC aggregation audit and auto-sweep yield optimizer."
+>
+  <div class="container container-narrow methodology-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Methodology</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-gold">MATHEMATICAL RIGOR</span>
+      <h1 class="page-title">Calculation Methodologies</h1>
+      <p class="page-subtitle">
+        Transparent statutory equations, compounding assumptions, and algorithmic logic governing all VaultBanking solvers.
+      </p>
+    </header>
+
+    <div class="methodology-content">
+      <h2>1. DICGC Deposit Insurance Aggregation Algorithm</h2>
+      <p>
+        The DICGC aggregation solver implements a multi-step deterministic grouping pipeline based strictly on Section 16(1) and Section 17(1) of the DICGC Act, 1961:
+      </p>
+
+      <div class="formula-block">
+        Net Insurable Balance = max(0, Sum(Principal + Accrued Interest) - Sum(Outstanding Loan Dues))<br />
+        Insured Payout = min(₹5,00,000, Net Insurable Balance)<br />
+        Uninsured At-Risk Capital = max(0, Net Insurable Balance - ₹5,00,000)
+      </div>
+
+      <p><strong>Capacity Merging Rule:</strong> Sole proprietorship holdings are programmatically normalized to the proprietor's individual capacity:</p>
+      <pre><code>if (capacity === 'sole_proprietorship') capacity = 'individual';</code></pre>
+
+      <h2>2. Auto-Sweep Flexi-Deposit Yield & Breakage Optimization</h2>
+      <p>
+        The optimizer computes the true economic spread between a pure savings baseline and an auto-sweep configuration, incorporating breakage penalties and Income Tax Act section boundaries:
+      </p>
+
+      <h3>Baseline: Pure Savings Account</h3>
+      <div class="formula-block">
+        Gross Interest (Savings) = Average Operating Balance × Savings Interest Rate<br />
+        Taxable Savings Interest = max(0, Gross Interest - Section 80TTA/80TTB Exemption)<br />
+        Tax Paid (Savings) = Taxable Savings Interest × Marginal Slab Rate<br />
+        Effective Net Yield = (Gross Interest - Tax Paid) / Average Balance × 100
+      </div>
+
+      <h3>Auto-Sweep Facility with LIFO Breakage</h3>
+      <div class="formula-block">
+        Retained Savings = min(Average Balance, Threshold)<br />
+        Swept FD Capital = max(0, Average Balance - Threshold)<br />
+        Gross Interest (Sweep) = (Retained Savings × r_savings) + (Swept FD Capital × r_FD)
+      </div>
+
+      <p>
+        When annual cash outflows exceed the retained savings buffer, premature reverse sweeps occur. The penalty is deducted from the gross interest:
+      </p>
+      <div class="formula-block">
+        Breakage Penalty Drag = Broken Capital × Premature Penalty Rate<br />
+        Adjusted Gross = Gross Interest (Sweep) - Breakage Penalty Drag
+      </div>
+
+      <h2>3. Operating Cash Tiering Formulation</h2>
+      <p>
+        Adapted from the Basel III Liquidity Coverage Ratio (LCR) unencumbered High-Quality Liquid Asset requirements:
+      </p>
+      <div class="formula-block">
+        Tier 1 (Intraday) = min(Total Cash, 1.5 × Monthly OPEX)<br />
+        Tier 2 (Working Capital) = min(Total Cash - Tier 1, (Buffer Months - 1.5) × Monthly OPEX)<br />
+        Tier 3 (Contingency Core) = max(0, Total Cash - Tier 1 - Tier 2)<br />
+        Recommended Minimum Bank Entities = max(2, ceil(Total Cash / ₹5,00,000))
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .methodology-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .methodology-content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--iq-text-primary);
+  }
+
+  .methodology-content h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+
+  .methodology-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .formula-block {
+    background: var(--iq-surface-raised);
+    border: 1px solid var(--iq-border);
+    border-radius: var(--iq-radius-md);
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    font-family: var(--iq-font-mono);
+    color: var(--iq-rupee-gold);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+</style>

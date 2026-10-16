@@ -1,0 +1,96 @@
+/**
+ * InvestiQ Universal Design Tokens
+ * System-wide institutional palette and typography
+ */
+:root {
+  /* Typography */
+  --iq-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --iq-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Color Palette - Institutional Dark Mode (Default) */
+  --iq-bg: #090d14;
+  --iq-bg-canvas: #06090e;
+  --iq-surface: #101622;
+  --iq-surface-raised: #182030;
+  --iq-surface-overlay: #232d42;
+  --iq-border: #232d42;
+  --iq-border-subtle: #182030;
+
+  /* Typography Colors */
+  --iq-text-primary: #f0f6fc;
+  --iq-text-secondary: #8da2be;
+  --iq-text-muted: #647690;
+  --iq-text-link: #58a6ff;
+  --iq-text-link-hover: #79c0ff;
+
+  /* Quantitative & Status Accents */
+  --iq-rupee-gold: #e3b341;
+  --iq-rupee-gold-glow: rgba(227, 179, 65, 0.15);
+  --iq-accent: #388bfd;
+  --iq-accent-glow: rgba(56, 139, 253, 0.2);
+  --iq-success: #3fb950;
+  --iq-success-bg: rgba(63, 185, 80, 0.12);
+  --iq-warning: #d29922;
+  --iq-warning-bg: rgba(210, 153, 34, 0.14);
+  --iq-danger: #f85149;
+  --iq-danger-bg: rgba(248, 81, 73, 0.14);
+  --iq-purple: #bc8cff;
+  --iq-cyan: #39c5cf;
+
+  /* Spacing */
+  --iq-space-xs: 0.25rem;
+  --iq-space-sm: 0.5rem;
+  --iq-space-md: 1rem;
+  --iq-space-lg: 1.5rem;
+  --iq-space-xl: 2rem;
+  --iq-space-2xl: 3rem;
+  --iq-space-3xl: 4.5rem;
+
+  /* Radii */
+  --iq-radius-sm: 4px;
+  --iq-radius-md: 8px;
+  --iq-radius-lg: 12px;
+  --iq-radius-full: 9999px;
+
+  /* Shadows */
+  --iq-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --iq-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --iq-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* Transitions */
+  --iq-transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme='light'] {
+  --iq-bg: #f4f6f9;
+  --iq-bg-canvas: #ffffff;
+  --iq-surface: #ffffff;
+  --iq-surface-raised: #ebf0f7;
+  --iq-surface-overlay: #dbe3ee;
+  --iq-border: #cfd8e5;
+  --iq-border-subtle: #e4eaf3;
+
+  --iq-text-primary: #111827;
+  --iq-text-secondary: #4b5563;
+  --iq-text-muted: #6b7280;
+
+  --iq-text-link: #0969da;
+  --iq-text-link-hover: #0550ae;
+
+  --iq-rupee-gold: #9a6700;
+  --iq-rupee-gold-glow: rgba(154, 103, 0, 0.1);
+  --iq-accent: #0969da;
+  --iq-accent-glow: rgba(9, 105, 218, 0.12);
+  --iq-success: #1a7f37;
+  --iq-success-bg: rgba(26, 127, 55, 0.08);
+  --iq-warning: #9a6700;
+  --iq-warning-bg: rgba(154, 103, 0, 0.08);
+  --iq-danger: #cf222e;
+  --iq-danger-bg: rgba(207, 34, 46, 0.08);
+  --iq-purple: #8250df;
+  --iq-cyan: #057a88;
+
+  --iq-shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.08);
+  --iq-shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
+  --iq-shadow-lg: 0 12px 28px rgba(17, 24, 39, 0.12);
+}

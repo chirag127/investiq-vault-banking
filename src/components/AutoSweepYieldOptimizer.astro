@@ -1,0 +1,329 @@
+---
+// AutoSweepYieldOptimizer.astro
+// Interactive client-side solver for Auto-Sweep vs Savings Yield & Breakage Optimization
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<div class="card solver-card" id="auto-sweep-optimizer">
+  <div class="solver-header">
+    <div class="solver-tag">
+      <span class="badge badge-gold">CASH OPTIMIZATION SOLVER</span>
+      <span class="badge badge-blue">TAX & BREAKAGE ENGINE</span>
+    </div>
+    <h3 class="solver-title">Auto-Sweep versus Savings Yield Optimizer</h3>
+    <p class="solver-desc">
+      Quantify the real post-tax net alpha of bank auto-sweep flexi-deposits. Models threshold retention, chunk step units, premature withdrawal breakage penalties, and the tax differential between Section 80TTA (savings) and marginal FD tax slabs.
+    </p>
+  </div>
+
+  <div class="solver-body">
+    <div class="optimizer-grid">
+      <!-- Input Controls -->
+      <div class="optimizer-inputs">
+        <div class="form-group">
+          <label class="form-label" for="inp-avg-balance">Average Operating Balance (₹)</label>
+          <input type="number" id="inp-avg-balance" class="form-control" value="250000" min="5000" step="10000" />
+          <span class="input-hint">Total cash maintained in the account across the month.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-threshold">Sweep Threshold Retention (₹)</label>
+          <input type="number" id="inp-threshold" class="form-control" value="25000" min="5000" step="5000" />
+          <span class="input-hint">Minimum balance kept in transactional savings.</span>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label" for="inp-savings-rate">Savings Interest Rate (%)</label>
+            <input type="number" id="inp-savings-rate" class="form-control" value="3.00" min="1.0" max="7.0" step="0.25" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-sweep-rate">Swept FD Interest Rate (%)</label>
+            <input type="number" id="inp-sweep-rate" class="form-control" value="7.10" min="4.0" max="10.0" step="0.10" />
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label" for="inp-penalty-rate">Breakage Penalty Drag (%)</label>
+            <input type="number" id="inp-penalty-rate" class="form-control" value="0.50" min="0.0" max="2.0" step="0.25" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-tax-slab">Marginal Income Tax Slab (%)</label>
+            <select id="inp-tax-slab" class="form-control">
+              <option value="0">0% (Nil / Below Exemption)</option>
+              <option value="5">5.2% (5% Slab + Cess)</option>
+              <option value="10">10.4% (10% Slab + Cess)</option>
+              <option value="15">15.6% (15% Slab + Cess)</option>
+              <option value="20">20.8% (20% Slab + Cess)</option>
+              <option value="30" selected>31.2% (30% Slab + 4% Cess)</option>
+              <option value="39">39.0% (Highest Surcharge Bracket)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-monthly-outflow">Expected Monthly Outflow Demand (₹)</label>
+          <input type="number" id="inp-monthly-outflow" class="form-control" value="40000" min="0" step="5000" />
+          <span class="input-hint">Outflows exceeding threshold force premature FD liquidation.</span>
+        </div>
+
+        <div class="form-group-check">
+          <input type="checkbox" id="inp-senior-citizen" />
+          <label for="inp-senior-citizen">Eligible for Senior Citizen Benefits (Section 80TTB ₹50k Exemption)</label>
+        </div>
+      </div>
+
+      <!-- Output Analysis -->
+      <div class="optimizer-outputs">
+        <h4>Comparative Annual Yield Performance</h4>
+
+        <div class="comparison-cards">
+          <!-- Pure Savings -->
+          <div class="card comp-card">
+            <h5>Pure Savings Account</h5>
+            <div class="comp-metric">
+              <span>Gross Interest:</span>
+              <strong id="pure-gross-disp">₹7,500</strong>
+            </div>
+            <div class="comp-metric">
+              <span>Tax Withheld / Owed:</span>
+              <strong id="pure-tax-disp" style="color: var(--iq-danger);">₹0</strong>
+            </div>
+            <div class="comp-metric comp-net">
+              <span>Net In-Pocket:</span>
+              <strong id="pure-net-disp">₹7,500</strong>
+            </div>
+            <div class="comp-yield">
+              Effective Net Yield: <strong id="pure-yield-disp">3.00%</strong>
+            </div>
+          </div>
+
+          <!-- Auto-Sweep -->
+          <div class="card comp-card comp-sweep">
+            <h5>Auto-Sweep Flexi-Account</h5>
+            <div class="comp-metric">
+              <span>Gross Interest:</span>
+              <strong id="sweep-gross-disp">₹16,725</strong>
+            </div>
+            <div class="comp-metric">
+              <span>Breakage Penalty Loss:</span>
+              <strong id="sweep-penalty-disp" style="color: var(--iq-danger);">-₹75</strong>
+            </div>
+            <div class="comp-metric">
+              <span>Income Tax Drag:</span>
+              <strong id="sweep-tax-disp" style="color: var(--iq-danger);">-₹5,195</strong>
+            </div>
+            <div class="comp-metric comp-net">
+              <span>Net In-Pocket:</span>
+              <strong id="sweep-net-disp" style="color: var(--iq-success);">₹11,455</strong>
+            </div>
+            <div class="comp-yield">
+              Effective Net Yield: <strong id="sweep-yield-disp">4.58%</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Net Alpha Callout -->
+        <div class="net-alpha-banner" id="alpha-banner">
+          <div class="alpha-headline">
+            <span>Net Annual Extra Wealth (Alpha):</span>
+            <strong id="net-alpha-disp">+₹3,955</strong>
+          </div>
+          <div class="alpha-sub" id="alpha-points-disp">
+            Spread: +1.58 percentage points higher than pure savings
+          </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="callout callout-success" id="sweep-rec-box">
+          Loading optimization recommendation...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { calculateAutoSweepOptimization } from '../lib/finance-math';
+
+  function runOptimizer() {
+    const avgBal = Number((document.getElementById('inp-avg-balance') as HTMLInputElement)?.value) || 0;
+    const thresh = Number((document.getElementById('inp-threshold') as HTMLInputElement)?.value) || 0;
+    const rSavings = Number((document.getElementById('inp-savings-rate') as HTMLInputElement)?.value) || 3.0;
+    const rSweep = Number((document.getElementById('inp-sweep-rate') as HTMLInputElement)?.value) || 7.0;
+    const rPenalty = Number((document.getElementById('inp-penalty-rate') as HTMLInputElement)?.value) || 0.5;
+    const taxSlab = Number((document.getElementById('inp-tax-slab') as HTMLSelectElement)?.value) || 30;
+    const monthlyOut = Number((document.getElementById('inp-monthly-outflow') as HTMLInputElement)?.value) || 0;
+    const isSenior = (document.getElementById('inp-senior-citizen') as HTMLInputElement)?.checked || false;
+
+    try {
+      const res = calculateAutoSweepOptimization({
+        averageBalance: avgBal,
+        sweepThreshold: thresh,
+        sweepChunkStep: 5000,
+        savingsInterestRatePct: rSavings,
+        sweepFDInterestRatePct: rSweep,
+        prematureBreakagePenaltyPct: rPenalty,
+        expectedMonthlyOutflowDemand: monthlyOut,
+        taxSlabRatePct: taxSlab,
+        isSeniorCitizen: isSenior
+      });
+
+      // Update UI
+      document.getElementById('pure-gross-disp')!.textContent = `₹${res.pureSavingsAnnualInterest.toLocaleString('en-IN')}`;
+      document.getElementById('pure-tax-disp')!.textContent = `-₹${res.pureSavingsTaxPaid.toLocaleString('en-IN')}`;
+      document.getElementById('pure-net-disp')!.textContent = `₹${res.pureSavingsNetInPocket.toLocaleString('en-IN')}`;
+      document.getElementById('pure-yield-disp')!.textContent = `${res.pureSavingsEffectiveYieldPct}%`;
+
+      document.getElementById('sweep-gross-disp')!.textContent = `₹${res.sweepAnnualGrossInterest.toLocaleString('en-IN')}`;
+      document.getElementById('sweep-penalty-disp')!.textContent = `-₹${res.estimatedBreakagePenaltyLoss.toLocaleString('en-IN')}`;
+      document.getElementById('sweep-tax-disp')!.textContent = `-₹${res.sweepTaxPaid.toLocaleString('en-IN')}`;
+      document.getElementById('sweep-net-disp')!.textContent = `₹${res.sweepNetInPocket.toLocaleString('en-IN')}`;
+      document.getElementById('sweep-yield-disp')!.textContent = `${res.sweepEffectiveYieldPct}%`;
+
+      document.getElementById('net-alpha-disp')!.textContent = `${res.netAnnualAlpha >= 0 ? '+' : ''}₹${res.netAnnualAlpha.toLocaleString('en-IN')}`;
+      document.getElementById('alpha-points-disp')!.textContent = `Spread: ${res.alphaPercentagePoints >= 0 ? '+' : ''}${res.alphaPercentagePoints} percentage points`;
+
+      const recBox = document.getElementById('sweep-rec-box');
+      if (recBox) {
+        recBox.innerHTML = `<strong>Quantitative Recommendation:</strong> ${res.sweepRecommendation}`;
+        recBox.className = res.netAnnualAlpha > 1000 ? 'callout callout-success' : 'callout callout-warning';
+      }
+    } catch (e: any) {
+      console.error(e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputs = [
+      'inp-avg-balance',
+      'inp-threshold',
+      'inp-savings-rate',
+      'inp-sweep-rate',
+      'inp-penalty-rate',
+      'inp-tax-slab',
+      'inp-monthly-outflow',
+      'inp-senior-citizen'
+    ];
+
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', runOptimizer);
+        el.addEventListener('change', runOptimizer);
+      }
+    });
+
+    runOptimizer();
+  });
+</script>
+
+<style>
+  .solver-card {
+    margin: 2.5rem 0;
+    padding: 2rem;
+  }
+
+  .optimizer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group-check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    color: var(--iq-text-secondary);
+  }
+
+  .input-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--iq-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .comparison-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .comp-card {
+    padding: 1.25rem;
+    background: var(--iq-surface-raised);
+  }
+
+  .comp-sweep {
+    border-color: var(--iq-accent);
+  }
+
+  .comp-card h5 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+  }
+
+  .comp-metric {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .comp-net {
+    border-top: 1px solid var(--iq-border);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .comp-yield {
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    color: var(--iq-text-secondary);
+  }
+
+  .net-alpha-banner {
+    background: var(--iq-surface);
+    border: 1px solid var(--iq-rupee-gold);
+    border-radius: var(--iq-radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .alpha-headline {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+  }
+
+  .alpha-headline strong {
+    color: var(--iq-rupee-gold);
+    font-size: 1.35rem;
+    font-family: var(--iq-font-mono);
+  }
+
+  .alpha-sub {
+    font-size: 0.8rem;
+    color: var(--iq-text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .optimizer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

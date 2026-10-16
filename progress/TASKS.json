@@ -1,0 +1,50 @@
+[
+  {
+    "id": "TASK-01",
+    "title": "Initialize Package and Astro Dependencies",
+    "status": "completed",
+    "category": "infra"
+  },
+  {
+    "id": "TASK-02",
+    "title": "Implement Finance Math Core and Vitest Unit Tests",
+    "status": "completed",
+    "category": "core_math"
+  },
+  {
+    "id": "TASK-03",
+    "title": "Establish Universal Design System, Tokens and Layouts",
+    "status": "completed",
+    "category": "ui"
+  },
+  {
+    "id": "TASK-04",
+    "title": "Author 15 In-Depth Bank Risk & Liquidity Articles",
+    "status": "completed",
+    "category": "content"
+  },
+  {
+    "id": "TASK-05",
+    "title": "Implement Client-Side Interactive Banking Solvers",
+    "status": "completed",
+    "category": "calculators"
+  },
+  {
+    "id": "TASK-06",
+    "title": "Build Governance, Statutory Sources, Glossary, and FAQ Pages",
+    "status": "completed",
+    "category": "pages"
+  },
+  {
+    "id": "TASK-07",
+    "title": "Run Privacy Scanner, Vitest, Astro Build and Pagefind",
+    "status": "completed",
+    "category": "qa"
+  },
+  {
+    "id": "TASK-08",
+    "title": "Commit, Push and Trigger GitHub Actions Pages Deployment",
+    "status": "in_progress",
+    "category": "deployment"
+  }
+]

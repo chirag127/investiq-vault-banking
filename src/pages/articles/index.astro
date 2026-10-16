@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles');
+const sortedArticles = articles.sort((a, b) => a.slug.localeCompare(b.slug));
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Category grouping
+const categories = [
+  'Institutional Architecture & Bank Risk',
+  'DICGC Deposit Insurance & Statutory Limits',
+  'Operating Cash & Auto-Sweep Mechanics',
+  'Cooperative vs Scheduled Commercial Bank Risk',
+  'Account Operations, Nomination & Fraud Defense'
+];
+---
+
+<BaseLayout
+  title="Quantitative Financial Research Library"
+  description="All 15+ master treatises covering Indian bank risk, DICGC statutory deposit insurance aggregation, D-SIB capital buffers, flexi-sweep mechanics, and treasury cash tiering."
+>
+  <div class="container library-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Research Library</span>
+    </nav>
+
+    <header class="library-header">
+      <div class="library-tags">
+        <span class="badge badge-gold">15 RESEARCH PAPERS</span>
+        <span class="badge badge-blue">PRIMARY INDIAN STATUTES AUDITED</span>
+      </div>
+      <h1 class="library-title">Quantitative Banking Research Library</h1>
+      <p class="library-desc">
+        A structured, peer-reviewed collection of technical treatises dissecting the legal doctrines, central bank gazettes, capital adequacy frameworks, and mathematical cash flows of the Indian banking system.
+      </p>
+    </header>
+
+    <div class="categories-container">
+      {categories.map(cat => {
+        const catArticles = sortedArticles.filter(a => a.data.category === cat);
+        if (catArticles.length === 0) return null;
+
+        return (
+          <section class="category-block">
+            <h2 class="category-heading">{cat}</h2>
+            <div class="category-grid">
+              {catArticles.map(art => (
+                <article class="card article-card">
+                  <div class="card-meta">
+                    <span class="badge badge-blue">Verified: {art.data.lastVerifiedDate}</span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href={`${basePath}/articles/${art.slug}/`}>{art.data.title}</a>
+                  </h3>
+                  <p class="card-desc">{art.data.description}</p>
+                  <div class="card-tags">
+                    {art.data.tags.slice(0, 3).map(tag => (
+                      <span class="tag-pill">#{tag}</span>
+                    ))}
+                  </div>
+                  <div class="card-footer">
+                    <a href={`${basePath}/articles/${art.slug}/`} class="card-link">
+                      Examine Statutory Model & Citations →
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .library-container {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .library-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .library-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .library-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .library-desc {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    max-width: 820px;
+    line-height: 1.6;
+  }
+
+  .category-block {
+    margin-bottom: 3rem;
+  }
+
+  .category-heading {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--iq-surface);
+  }
+
+  .card-meta {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    line-height: 1.35;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .card-title a {
+    color: var(--iq-text-primary);
+  }
+
+  .card-title a:hover {
+    color: var(--iq-text-link);
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .tag-pill {
+    font-size: 0.75rem;
+    color: var(--iq-text-muted);
+    background: var(--iq-surface-raised);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--iq-radius-sm);
+  }
+
+  .card-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--iq-text-link);
+  }
+</style>

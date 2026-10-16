@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Report an Error & Editorial Corrections Protocol"
+  description="InvestiQ VaultBanking transparent correction policy: submit factual discrepancies, statutory amendments, or mathematical errors directly to our research repository."
+>
+  <div class="container container-narrow corrections-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Corrections Protocol</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-gold">EDITORIAL INTEGRITY</span>
+      <h1 class="page-title">Report an Error / Corrections Procedure</h1>
+      <p class="page-subtitle">
+        We adhere to strict standards of statutory accuracy. If you identify a discrepancy against official RBI circulars or gazettes, report it here.
+      </p>
+    </header>
+
+    <div class="corrections-content">
+      <p>
+        InvestiQ VaultBanking maintains an uncompromising commitment to empirical truth and statutory fidelity. Because financial regulations, tax deductions, and central bank directives evolve, we welcome peer review and community auditing.
+      </p>
+
+      <h2>1. The Editorial Review Protocol</h2>
+      <p>Every submitted correction undergoes the following verification lifecycle:</p>
+      <ol>
+        <li><strong>Factual Verification:</strong> The claim is audited against the primary Government of India Gazette, RBI Master Direction, or Supreme Court Judgment. Secondary media reports or third-party blog articles are insufficient.</li>
+        <li><strong>Quantitative Audit:</strong> If a formula or calculator output is challenged, test cases are re-executed in `tests/finance-math.test.ts` to identify the boundary condition or edge case.</li>
+        <li><strong>Public Correction Log:</strong> When an error is verified, the relevant article is updated immediately with an explicit editorial note and logged in our GitHub commit history.</li>
+      </ol>
+
+      <h2>2. How to Submit a Correction</h2>
+      <div class="card submission-card">
+        <h3>Option A: Open a GitHub Issue (Fastest)</h3>
+        <p>
+          Submit an issue directly to our public repository with the label <code>editorial-correction</code>:
+        </p>
+        <a href="https://github.com/chirag127/investiq-vault-banking/issues" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Open GitHub Issue ↗
+        </a>
+      </div>
+
+      <div class="card submission-card" style="margin-top: 1.5rem;">
+        <h3>Option B: Editorial Correction Checklist</h3>
+        <p>When reporting a factual or statutory error, please provide:</p>
+        <ul style="margin: 0.5rem 0 1rem 1.25rem;">
+          <li><strong>Page URL / Article Title:</strong> Exact page where the discrepancy appears.</li>
+          <li><strong>Specific Claim:</strong> The exact sentence, threshold, or formula in question.</li>
+          <li><strong>Official Source Citation:</strong> RBI Circular Number, Gazette Notification Date, or Supreme Court Case Law citation.</li>
+          <li><strong>Suggested Wording:</strong> Recommended correction reflecting current legal fact.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .corrections-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .corrections-content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--iq-text-primary);
+  }
+
+  .corrections-content h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+
+  .submission-card {
+    padding: 1.5rem;
+    background: var(--iq-surface);
+  }
+
+  .submission-card h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+</style>

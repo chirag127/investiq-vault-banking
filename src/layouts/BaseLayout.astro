@@ -1,0 +1,426 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://chirag127.github.io').href;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | InvestiQ VaultBanking</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content="#090d14" />
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content={`${title} | InvestiQ VaultBanking`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="InvestiQ India — VaultBanking" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | InvestiQ VaultBanking`} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Google Fonts & System Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Pagefind Static Search UI -->
+    <link href={`${basePath}/pagefind/pagefind-ui.css`} rel="stylesheet" />
+    <script src={`${basePath}/pagefind/pagefind-ui.js`} is:inline></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-to-content">Skip to primary content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand-group">
+          <a href={`${basePath}/`} class="brand-link">
+            <span class="brand-badge">INVESTIQ 04</span>
+            <span class="brand-name">VaultBanking</span>
+          </a>
+          <span class="tagline">Bank Risk, Deposit Insurance & Operating Cash Systems</span>
+        </div>
+
+        <nav class="site-nav" aria-label="Main Navigation">
+          <ul class="nav-list">
+            <li><a href={`${basePath}/`}>Overview</a></li>
+            <li><a href={`${basePath}/articles/`}>Research Library</a></li>
+            <li><a href={`${basePath}/calculators/`}>Interactive Solvers</a></li>
+            <li><a href={`${basePath}/sources/`}>Statutory Sources</a></li>
+            <li><a href={`${basePath}/faq/`}>FAQ</a></li>
+            <li><a href={`${basePath}/glossary/`}>Glossary</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle High-Contrast Color Theme">
+            🌓
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="search-banner">
+      <div class="container search-container">
+        <div id="search" class="pagefind-search-root"></div>
+      </div>
+    </div>
+
+    <main id="main-content" class="main-body">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col footer-col-main">
+            <div class="footer-brand">
+              <span class="brand-badge">INVESTIQ 04</span>
+              <h4>VaultBanking</h4>
+            </div>
+            <p class="footer-desc">
+              Public institutional research portal dedicated to empirical Indian bank architecture, systemic D-SIB risk, DICGC statutory deposit insurance aggregation, flexi-sweep optimization, and treasury cash tiering.
+            </p>
+            <p class="footer-privacy-note">
+              🔒 100% Client-Side Privacy: Zero tracking cookies, zero analytics beacons, zero telemetry scripts.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h5>Solvers & Audits</h5>
+            <ul class="footer-links">
+              <li><a href={`${basePath}/calculators/#dicgc-audit`}>DICGC Insurance Aggregation Audit</a></li>
+              <li><a href={`${basePath}/calculators/#auto-sweep-optimizer`}>Auto-Sweep vs Savings Yield Optimizer</a></li>
+              <li><a href={`${basePath}/calculators/#cash-tiering-planner`}>Operating Cash Tiering Planner</a></li>
+              <li><a href={`${basePath}/methodology/`}>Calculation Methodologies</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Research & Law</h5>
+            <ul class="footer-links">
+              <li><a href={`${basePath}/articles/`}>All 15+ Research Articles</a></li>
+              <li><a href={`${basePath}/glossary/`}>Banking & Insolvency Glossary</a></li>
+              <li><a href={`${basePath}/faq/`}>Frequently Asked Questions</a></li>
+              <li><a href={`${basePath}/sources/`}>Official Gazettes & RBI Directions</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Transparency & Governance</h5>
+            <ul class="footer-links">
+              <li><a href={`${basePath}/privacy/`}>Zero-Telemetry Architecture</a></li>
+              <li><a href={`${basePath}/disclaimer/`}>Educational Research Disclaimer</a></li>
+              <li><a href={`${basePath}/corrections/`}>Report an Error / Corrections</a></li>
+              <li><a href="https://github.com/chirag127/investiq-vault-banking" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="disclaimer-callout">
+            <strong>Institutional Banking Research Notice:</strong> VaultBanking is published for empirical research, quantitative modeling, and educational reference only under Indian regulatory standards. It does not provide legal advice, accounting advice, or formal insolvency counsel. Deposit insurance limits are governed by the Deposit Insurance and Credit Guarantee Corporation Act, 1961 and Reserve Bank of India circulars. Always verify specific account holdings with your authorized Scheduled Commercial Bank branch manager or legal counsel.
+          </div>
+          <div class="copyright-line">
+            <span>© 2026 InvestiQ India. Sovereign educational financial systems.</span>
+            <span>Version 1.0.0 • Verified against DICGC Act 1961 (as amended 2021) & RBI D-SIB Framework</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      // Client-side theme switch
+      (function() {
+        const savedTheme = localStorage.getItem('iq_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        const themeBtn = document.getElementById('theme-toggle');
+        if (themeBtn) {
+          themeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('iq_theme', next);
+          });
+        }
+
+        // Initialize Pagefind UI if container exists
+        window.addEventListener('DOMContentLoaded', () => {
+          if (document.getElementById('search') && window.PagefindUI) {
+            new window.PagefindUI({
+              element: "#search",
+              showSubResults: true,
+              resetStyles: false
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip-to-content {
+    position: absolute;
+    top: -999px;
+    left: 1rem;
+    background: var(--iq-accent);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--iq-radius-md);
+    z-index: 9999;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .skip-to-content:focus {
+    top: 1rem;
+  }
+
+  .site-header {
+    background-color: var(--iq-surface);
+    border-bottom: 1px solid var(--iq-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    gap: 1.5rem;
+  }
+
+  .brand-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .brand-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    background-color: var(--iq-rupee-gold-glow);
+    color: var(--iq-rupee-gold);
+    border: 1px solid var(--iq-rupee-gold);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--iq-radius-sm);
+  }
+
+  .brand-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--iq-text-primary);
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+    color: var(--iq-text-secondary);
+  }
+
+  .site-nav .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-nav a {
+    color: var(--iq-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--iq-radius-sm);
+  }
+
+  .site-nav a:hover {
+    color: var(--iq-text-primary);
+    background-color: var(--iq-surface-raised);
+    text-decoration: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .theme-toggle-btn {
+    background: var(--iq-surface-raised);
+    border: 1px solid var(--iq-border);
+    color: var(--iq-text-primary);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--iq-radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: var(--iq-transition);
+  }
+
+  .theme-toggle-btn:hover {
+    background-color: var(--iq-surface-overlay);
+    border-color: var(--iq-text-secondary);
+  }
+
+  .search-banner {
+    background-color: var(--iq-bg-canvas);
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding: 0.5rem 0;
+  }
+
+  .search-container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .main-body {
+    flex: 1;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .site-footer {
+    background-color: var(--iq-surface);
+    border-top: 1px solid var(--iq-border);
+    padding: 3rem 0 2rem;
+    margin-top: auto;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-brand h4 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .footer-desc {
+    font-size: 0.85rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-privacy-note {
+    font-size: 0.75rem;
+    color: var(--iq-success);
+    font-weight: 600;
+  }
+
+  .footer-col h5 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--iq-text-secondary);
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links a {
+    color: var(--iq-text-secondary);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .footer-links a:hover {
+    color: var(--iq-text-link);
+    text-decoration: underline;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--iq-border);
+    padding-top: 1.5rem;
+  }
+
+  .disclaimer-callout {
+    font-size: 0.75rem;
+    color: var(--iq-text-muted);
+    line-height: 1.5;
+    background-color: var(--iq-surface-raised);
+    padding: 0.75rem 1rem;
+    border-radius: var(--iq-radius-md);
+    margin-bottom: 1rem;
+  }
+
+  .copyright-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--iq-text-muted);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 840px) {
+    .header-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .site-nav .nav-list {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

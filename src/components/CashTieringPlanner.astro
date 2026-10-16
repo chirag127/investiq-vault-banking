@@ -1,0 +1,229 @@
+---
+// CashTieringPlanner.astro
+// Interactive client-side solver for Institutional Operating Cash Tiering
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<div class="card solver-card" id="cash-tiering-planner">
+  <div class="solver-header">
+    <div class="solver-tag">
+      <span class="badge badge-gold">TREASURY MANAGEMENT</span>
+      <span class="badge badge-blue">BASEL III LCR LIQUIDITY MODEL</span>
+    </div>
+    <h3 class="solver-title">Operating Cash Tiering & Counterparty Diversification Planner</h3>
+    <p class="solver-desc">
+      Architect personal and corporate operating cash into three non-correlated liquidity tranches (Intraday Clearing, Working Capital Buffer, and Strategic Contingency Reserve) while enforcing safe ₹5,00,000 multi-bank diversification.
+    </p>
+  </div>
+
+  <div class="solver-body">
+    <div class="tiering-grid">
+      <!-- Input Controls -->
+      <div class="tiering-inputs">
+        <div class="form-group">
+          <label class="form-label" for="inp-total-cash">Total Operating Cash & Liquidity Reserves (₹)</label>
+          <input type="number" id="inp-total-cash" class="form-control" value="2500000" min="50000" step="50000" />
+          <span class="input-hint">Gross liquid capital across all accounts and short-term instruments.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-monthly-burn">Monthly Payroll & Non-Discretionary OPEX (₹)</label>
+          <input type="number" id="inp-monthly-burn" class="form-control" value="300000" min="10000" step="10000" />
+          <span class="input-hint">Fixed monthly cash outflows (salaries, rent, statutory taxes, EMIs).</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inp-buffer-months">Target Revenue Lag Cushion (Months)</label>
+          <input type="number" id="inp-buffer-months" class="form-control" value="4.5" min="2" max="12" step="0.5" />
+          <span class="input-hint">Total months of operational survival required under zero revenue.</span>
+        </div>
+      </div>
+
+      <!-- Tranche Allocation Output -->
+      <div class="tiering-outputs">
+        <h4>Tranche Allocation Architecture</h4>
+
+        <div class="tranche-cards">
+          <!-- Tier 1 -->
+          <div class="card tranche-card tranche-t1">
+            <div class="tranche-header">
+              <span class="badge badge-blue">TIER 1 • INTRADAY CLEARING</span>
+              <strong id="t1-amount-disp">₹4,50,000</strong>
+            </div>
+            <p class="tranche-role">Horizon: 0–30 Days • Allocation: 1.5× Monthly Burn</p>
+            <div class="tranche-specs">
+              <span>Location:</span> <strong>D-SIB Current/Savings (SBI, HDFC, ICICI)</strong>
+            </div>
+            <div class="tranche-specs">
+              <span>Objective:</span> <strong>Instant UPI/RTGS, zero breakage, zero friction</strong>
+            </div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="card tranche-card tranche-t2">
+            <div class="tranche-header">
+              <span class="badge badge-gold">TIER 2 • WORKING CAPITAL BUFFER</span>
+              <strong id="t2-amount-disp">₹9,00,000</strong>
+            </div>
+            <p class="tranche-role">Horizon: 30–90 Days • Operational Survival Cushion</p>
+            <div class="tranche-specs">
+              <span>Location:</span> <strong>Auto-Sweep FDs / 91-Day T-Bills / Sovereign Liquid Funds</strong>
+            </div>
+            <div class="tranche-specs">
+              <span>Objective:</span> <strong>Near-repo yields (~6.75%), T+1 liquidation</strong>
+            </div>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="card tranche-card tranche-t3">
+            <div class="tranche-header">
+              <span class="badge badge-green">TIER 3 • CONTINGENCY CORE</span>
+              <strong id="t3-amount-disp">₹11,50,000</strong>
+            </div>
+            <p class="tranche-role">Horizon: 90–365 Days • Balance Liquidity Reserve</p>
+            <div class="tranche-specs">
+              <span>Location:</span> <strong>Laddered Fixed Deposits / RBI Floating Rate Bonds</strong>
+            </div>
+            <div class="tranche-specs">
+              <span>Objective:</span> <strong>Full statutory capital preservation & 7.25%+ yield</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-Bank Counterparty Safeguard -->
+        <div class="counterparty-box">
+          <div class="counterparty-metric">
+            <span>Recommended Minimum Bank Entities:</span>
+            <strong id="rec-banks-disp">5 Institutions</strong>
+          </div>
+          <div class="counterparty-metric">
+            <span>Max Prudent Exposure Per Institution:</span>
+            <strong id="max-exposure-disp">₹5,00,000</strong>
+          </div>
+          <p class="counterparty-sub">
+            Maintains 100% of capital within the statutory ₹5,00,000 DICGC insurance cap per institution.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { planOperatingCashTiering } from '../lib/finance-math';
+
+  function runTiering() {
+    const totalCash = Number((document.getElementById('inp-total-cash') as HTMLInputElement)?.value) || 0;
+    const monthlyBurn = Number((document.getElementById('inp-monthly-burn') as HTMLInputElement)?.value) || 0;
+    const bufferMonths = Number((document.getElementById('inp-buffer-months') as HTMLInputElement)?.value) || 4;
+
+    try {
+      const plan = planOperatingCashTiering({
+        totalOperatingCash: totalCash,
+        monthlyPayrollAndOPEX: monthlyBurn,
+        unforeseenRevenueLagMonths: bufferMonths
+      });
+
+      document.getElementById('t1-amount-disp')!.textContent = `₹${plan.tier1IntradayBuffer.toLocaleString('en-IN')}`;
+      document.getElementById('t2-amount-disp')!.textContent = `₹${plan.tier2WorkingCapitalBuffer.toLocaleString('en-IN')}`;
+      document.getElementById('t3-amount-disp')!.textContent = `₹${plan.tier3ContingencyReserve.toLocaleString('en-IN')}`;
+      document.getElementById('rec-banks-disp')!.textContent = `${plan.recommendedBankCount} Institutions`;
+      document.getElementById('max-exposure-disp')!.textContent = `₹${plan.maxExposurePerBank.toLocaleString('en-IN')}`;
+    } catch (e: any) {
+      console.error(e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ['inp-total-cash', 'inp-monthly-burn', 'inp-buffer-months'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', runTiering);
+      }
+    });
+
+    runTiering();
+  });
+</script>
+
+<style>
+  .solver-card {
+    margin: 2.5rem 0;
+    padding: 2rem;
+  }
+
+  .tiering-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .tranche-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .tranche-card {
+    padding: 1.25rem;
+    background: var(--iq-surface-raised);
+  }
+
+  .tranche-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .tranche-header strong {
+    font-size: 1.35rem;
+    font-family: var(--iq-font-mono);
+  }
+
+  .tranche-role {
+    font-size: 0.82rem;
+    color: var(--iq-text-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .tranche-specs {
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .counterparty-box {
+    background: var(--iq-surface);
+    border: 1px solid var(--iq-border);
+    border-radius: var(--iq-radius-md);
+    padding: 1rem 1.25rem;
+  }
+
+  .counterparty-metric {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .counterparty-metric strong {
+    color: var(--iq-rupee-gold);
+    font-family: var(--iq-font-mono);
+  }
+
+  .counterparty-sub {
+    font-size: 0.78rem;
+    color: var(--iq-text-muted);
+    margin: 0.5rem 0 0 0;
+  }
+
+  @media (max-width: 900px) {
+    .tiering-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

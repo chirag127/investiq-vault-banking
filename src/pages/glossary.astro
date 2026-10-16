@@ -1,0 +1,176 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const terms = [
+  {
+    term: "All-Inclusive Directions (Section 35A)",
+    def: "Regulatory orders issued by the Reserve Bank of India under Section 35A of the Banking Regulation Act, 1949, capping cash withdrawals, restricting new loans, and pausing operations of a financially distressed bank."
+  },
+  {
+    term: "Auto-Sweep / Flexi-Deposit",
+    def: "A facility linking a transactional savings or current account to short-term term deposits. Surplus funds above a threshold are swept into higher-yielding FDs and reverse-swept automatically when liquidity is needed."
+  },
+  {
+    term: "Banker's Lien",
+    def: "The statutory right of a commercial bank under Section 171 of the Indian Contract Act, 1872 to retain customer securities and set off deposit balances against matured or defaulted debts owed to the bank in the same capacity."
+  },
+  {
+    term: "Capital to Risk-Weighted Assets Ratio (CRAR)",
+    def: "The regulatory capital metric measuring a bank's capital (Tier 1 + Tier 2) relative to its risk-weighted credit and operational assets. Minimum standard in India is 11.5% for commercial banks and 15% for SFBs."
+  },
+  {
+    term: "Common Equity Tier 1 (CET1)",
+    def: "The highest quality loss-absorbing core capital of a banking institution, consisting of paid-up equity capital, share premium, and statutory audited reserves."
+  },
+  {
+    term: "Depositor Education and Awareness (DEA) Fund",
+    def: "A statutory fund established by the RBI under Section 26A of the Banking Regulation Act, 1949, where bank deposits that have remained inoperative or unclaimed for 10 or more continuous years are transferred."
+  },
+  {
+    term: "DICGC",
+    def: "Deposit Insurance and Credit Guarantee Corporation. A wholly owned subsidiary of the Reserve Bank of India, created under the DICGC Act, 1961, providing statutory deposit insurance up to ₹5,00,000 per depositor per bank."
+  },
+  {
+    term: "Domestic Systemically Important Bank (D-SIB)",
+    def: "Institutions classified by the RBI as 'Too Big to Fail' (SBI, HDFC Bank, ICICI Bank) due to their immense size, complexity, and interconnectedness with the domestic economy, requiring additional CET1 capital buffers."
+  },
+  {
+    term: "Inoperative / Dormant Account",
+    def: "A bank account that has had zero customer-induced debit or credit transactions for more than two continuous years. RBI prohibits banks from levying minimum balance penalties on dormant accounts."
+  },
+  {
+    term: "LIFO Liquidation Order",
+    def: "Last-In, First-Out. The standard method used by major Indian commercial banks when breaking swept flexi-deposits during a cash shortfall, liquidating the newest FD first to minimize interest rate penalties."
+  },
+  {
+    term: "Liquidity Coverage Ratio (LCR)",
+    def: "A Basel III regulatory standard requiring banks to hold an unencumbered stock of High-Quality Liquid Assets (HQLA) capable of meeting total net stressed cash outflows over a 30-day liquidity crisis."
+  },
+  {
+    term: "Nominee (Form DA-1)",
+    def: "An individual designated by an account holder under Section 45ZA of the Banking Regulation Act, 1949 to receive deposit proceeds upon the depositor's demise as a fiduciary trustee for the rightful legal heirs."
+  },
+  {
+    term: "Prompt Corrective Action (PCA)",
+    def: "A supervisory framework triggered by the RBI when a bank breaches predefined risk thresholds on capital adequacy (CRAR), net non-performing assets (NNPA), or return on assets (ROA)."
+  },
+  {
+    term: "Right and Capacity",
+    def: "The legal doctrine governing deposit insurance in India: accounts held in the same legal ownership right are clubbed, while accounts held in distinct legal capacities (individual, joint, minor, corporate) command separate ₹5 Lakh covers."
+  },
+  {
+    term: "Section 18A (DICGC Act)",
+    def: "Statutory provision inserted by the 2021 Amendment Act guaranteeing depositors of a frozen bank an interim insurance payout of up to ₹5,00,000 within a strict 90-day time-bound framework."
+  },
+  {
+    term: "Section 80TTA",
+    def: "Section of the Income Tax Act, 1961 allowing a deduction of up to ₹10,000 per financial year on interest income derived from savings bank accounts for non-senior individual taxpayers."
+  },
+  {
+    term: "Section 80TTB",
+    def: "Section of the Income Tax Act, 1961 allowing a deduction of up to ₹50,000 per financial year on interest income derived from both savings accounts and fixed/term deposits for resident senior citizens (60+)."
+  },
+  {
+    term: "Small Finance Bank (SFB)",
+    def: "A class of differentiated commercial banks licensed by the RBI to advance financial inclusion, required to maintain a 15% CRAR and allocate 75% of their loan book to priority sectors."
+  },
+  {
+    term: "UDGAM Portal",
+    def: "Unclaimed Deposits – Gateway to Access inforMation. A centralized public search engine built by the Reserve Bank of India allowing citizens to locate and reclaim 10-year dormant deposits across multiple banks."
+  },
+  {
+    term: "Urban Cooperative Bank (UCB)",
+    def: "Primary cooperative banking institutions operating in urban and semi-urban centers, regulated by the RBI for banking functions and state/central cooperative authorities for registration."
+  }
+];
+---
+
+<BaseLayout
+  title="Banking & Deposit Insurance Glossary"
+  description="Comprehensive glossary of Indian banking, central bank supervision, DICGC statutes, insolvency doctrines, and liquidity management terminology."
+>
+  <div class="container container-narrow glossary-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Glossary</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-gold">QUANTITATIVE & STATUTORY LEXICON</span>
+      <h1 class="page-title">Banking & Insolvency Glossary</h1>
+      <p class="page-subtitle">
+        Precise definitions of institutional terminology, statutory provisions, central bank acronyms, and legal doctrines governing the Indian financial system.
+      </p>
+    </header>
+
+    <div class="terms-grid">
+      {terms.map(t => (
+        <div class="card term-card">
+          <h3 class="term-title">{t.term}</h3>
+          <p class="term-def">{t.def}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .glossary-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .terms-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .term-card {
+    padding: 1.25rem 1.5rem;
+    background: var(--iq-surface);
+  }
+
+  .term-title {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--iq-rupee-gold);
+    font-family: var(--iq-font-mono);
+  }
+
+  .term-def {
+    font-size: 0.95rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+</style>

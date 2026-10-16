@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Privacy Architecture & Zero-Telemetry Guarantee"
+  description="InvestiQ VaultBanking privacy architecture: 100% local in-browser computation, zero tracking cookies, zero analytics beacons, and automated CI privacy enforcement."
+>
+  <div class="container container-narrow privacy-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={`${basePath}/`}>Home</a> &gt; 
+      <span>Privacy Architecture</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="badge badge-green">100% CLIENT-SIDE PRIVACY</span>
+      <h1 class="page-title">Privacy Architecture & Zero-Telemetry Guarantee</h1>
+      <p class="page-subtitle">
+        Your sensitive bank account balances, loans, and personal financial models never leave your device.
+      </p>
+    </header>
+
+    <div class="privacy-content">
+      <div class="callout callout-success">
+        <strong>Absolute Financial Confidentiality:</strong> VaultBanking has zero back-end servers, zero database connections, zero analytics scripts, and zero third-party advertising trackers. Every calculation executes in your browser's local JavaScript runtime.
+      </div>
+
+      <h2>1. The Four Pillars of Our Sovereign Privacy Model</h2>
+
+      <h3>1. Zero Tracking Cookies</h3>
+      <p>
+        VaultBanking sets zero tracking cookies, advertising identifiers, or cross-site tracking beacons. The only data persisted locally is an optional theme preference (`iq_theme`) stored in your browser's private `localStorage`.
+      </p>
+
+      <h3>2. Zero Telemetry & Remote Logging</h3>
+      <p>
+        We do not use Google Analytics, Google Tag Manager, Meta Pixel, Hotjar, Clarity, Mixpanel, Segment, or any other telemetry service. No server receives any notification when you calculate deposit insurance or optimize sweep thresholds.
+      </p>
+
+      <h3>3. Zero Server-Side Transmission of Financial Inputs</h3>
+      <p>
+        When you enter your bank names, account holdings, and loan liabilities into the DICGC Aggregation Audit or Auto-Sweep Optimizer, those data points reside exclusively in transient browser memory. Refreshing the browser or clearing local state eliminates all inputs instantly.
+      </p>
+
+      <h3>4. Automated Continuous Privacy Auditing</h3>
+      <p>
+        Every commit and production release must pass our open-source `scripts/privacy-scanner.js` script. If any prohibited tracking pattern or remote beacon is introduced into the codebase, the build immediately aborts:
+      </p>
+      <pre><code>node scripts/privacy-scanner.js
+PASSED: Zero external telemetry, tracking cookies, or analytics detected. 100% Client-Side Privacy Verified.</code></pre>
+
+      <h2>2. Third-Party CDNs & Fonts</h2>
+      <p>
+        Google Fonts are loaded via static CSS preconnects without user-identifiable tracking cookies. Pagefind static search indexes are compiled entirely at build time and served locally from the same origin (`/pagefind/`), ensuring that search queries are never transmitted to any external search API.
+      </p>
+
+      <h2>3. Verifying in Your Browser</h2>
+      <p>
+        You can independently audit VaultBanking's privacy posture at any time:
+      </p>
+      <ol>
+        <li>Open Browser Developer Tools (<kbd>F12</kbd> or <kbd>Ctrl+Shift+I</kbd>).</li>
+        <li>Switch to the <strong>Network</strong> tab and perform any calculation. Notice that zero outbound HTTP POST/PUT requests are made.</li>
+        <li>Switch to the <strong>Application / Storage</strong> tab and inspect Cookies. You will observe that zero tracking cookies are set.</li>
+      </ol>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .privacy-page {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--iq-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--iq-text-secondary);
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--iq-border);
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.75rem;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--iq-text-secondary);
+    line-height: 1.6;
+  }
+
+  .privacy-content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--iq-text-primary);
+  }
+
+  .privacy-content h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--iq-border-subtle);
+    padding-bottom: 0.4rem;
+  }
+
+  .privacy-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+</style>
